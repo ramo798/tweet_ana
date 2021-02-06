@@ -4,25 +4,33 @@ import random
 import datetime
 import calendar
 
-CK = os.environ['CK']
-CS = os.environ['CS']
-AT = os.environ['AT']
-AS = os.environ['AS']
 
-auth = tweepy.OAuthHandler(CK, CS)
-auth.set_access_token(AT, AS)
+def date_conv(date_str):
+    date = date_str
+    word = date.split(" ")
 
-api = tweepy.API(auth, wait_on_rate_limit=True)
+    months = {}
+    for i, v in enumerate(calendar.month_abbr):
+        months[v] = i
 
-target = "@jishukuchan"
+    time_string = word[7] + "-" + str(months[word[1]]) + "-" + word[2]
+    time_datetime = datetime.datetime.strptime(time_string, '%Y-%m-%d')
+
+    return time_datetime
 
 
-date = "Sat Feb 06 10: 11: 49 +0000 2021"
-word = date.split(" ")
+if __name__ == '__main__':
+    CK = os.environ['CK']
+    CS = os.environ['CS']
+    AT = os.environ['AT']
+    AS = os.environ['AS']
 
-months = {}
-for i, v in enumerate(calendar.month_abbr):
-    months[v] = i
+    auth = tweepy.OAuthHandler(CK, CS)
+    auth.set_access_token(AT, AS)
 
-time_string = word[7] + "-" + str(months[word[1]]) + "-" + word[2]
-time_datetime = datetime.datetime.strptime(time_string, '%Y-%m-%d')
+    api = tweepy.API(auth, wait_on_rate_limit=True)
+
+    target = "@jishukuchan"
+
+    date = "Sat Feb 06 10: 11: 49 +0000 2021"
+    print(date_conv(date))
