@@ -4,6 +4,7 @@ import random
 import datetime
 import calendar
 import csv
+import time
 
 
 def date_conv(date_str):
@@ -14,7 +15,7 @@ def date_conv(date_str):
     for i, v in enumerate(calendar.month_abbr):
         months[v] = i
 
-    time_string = word[7] + "-" + str(months[word[1]]) + "-" + word[2]
+    time_string = word[5] + "-" + str(months[word[1]]) + "-" + word[2]
     time_datetime = datetime.datetime.strptime(time_string, '%Y-%m-%d')
 
     return time_datetime
@@ -22,11 +23,15 @@ def date_conv(date_str):
 
 def get_tweet(api, u_id):
     res = []
-    tweets = api.user_timeline(u_id)
+    try:
+        tweets = api.user_timeline(u_id)
+    except tweepy.error.TweepError:
+        return 0
+
     for tweet in tweets:
         # print(tweet._json['user']['name'])
         # print("")
-        created_at = tweet._json["created_at"]
+        created_at = date_conv(tweet._json["created_at"])
         id_str = tweet._json['user']["id_str"]
         text = tweet._json["text"].strip()
         text_conv = ""
@@ -54,9 +59,20 @@ if __name__ == '__main__':
 
     api = tweepy.API(auth, wait_on_rate_limit=True)
 
-    target = "@jishukuchan"
+    # target = "@jishukuchan"
+    target = "@saaaaaacchannn"
 
     # date = "Sat Feb 06 10: 11: 49 +0000 2021"
     # print(date_conv(date))
 
-    get_tweet(api, target)
+    # get_tweet(api, target)
+
+    user_list = []
+    with open('user.csv') as f:
+        reader = csv.reader(f)
+        for row in reader:
+            if row[2] == "woman":
+                user_list.append(row[0])
+
+    for user in user_list:
+        get_tweet(api, user)
