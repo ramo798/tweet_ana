@@ -3,6 +3,7 @@ import os
 import random
 import datetime
 import calendar
+import csv
 
 
 def date_conv(date_str):
@@ -19,6 +20,29 @@ def date_conv(date_str):
     return time_datetime
 
 
+def get_tweet(api, u_id):
+    res = []
+    tweets = api.user_timeline(u_id)
+    for tweet in tweets:
+        # print(tweet._json['user']['name'])
+        # print("")
+        created_at = tweet._json["created_at"]
+        id_str = tweet._json['user']["id_str"]
+        text = tweet._json["text"].strip()
+        text_conv = ""
+        for a in text:
+            text_conv += a.replace('\n', '').replace('\r\n', '')
+        name = tweet._json['user']["name"]
+        screen_name = tweet._json['user']["screen_name"]
+        profile_image_url = tweet._json['user']["profile_image_url"]
+        print(name, text_conv)
+        with open('tweet_list.csv', 'a') as f:
+            writer = csv.writer(f)
+            writer.writerow([name, screen_name, id_str, text_conv,
+                             profile_image_url, created_at])
+        f.close()
+
+
 if __name__ == '__main__':
     CK = os.environ['CK']
     CS = os.environ['CS']
@@ -32,5 +56,7 @@ if __name__ == '__main__':
 
     target = "@jishukuchan"
 
-    date = "Sat Feb 06 10: 11: 49 +0000 2021"
-    print(date_conv(date))
+    # date = "Sat Feb 06 10: 11: 49 +0000 2021"
+    # print(date_conv(date))
+
+    get_tweet(api, target)
