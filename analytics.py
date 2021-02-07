@@ -36,14 +36,14 @@ if __name__ == '__main__':
     # 出現回数集計用の数字の用意
     df['count'] = 1
 
-    print(df[['created_at', 'user.name', 'count', 'date']].head(20))
+    # print(df[['created_at', 'user.name', 'count', 'date']].head(20))
 
     # 時間帯ごとのルイートの集計
     tweet_per_hour = df[['count']].groupby(df['date'].dt.hour).sum()
-    print(tweet_per_hour)
-
-    # plt.figure(figsize=(20, 5))
-    # g = sns.barplot(x="created_at", y="id", data=df.set_index("created_at").resample("H")["id"].count().reset_index())
-    # labels = g.get_xticklabels()
-    # g.set_xticklabels(labels, rotation=90)
-    # plt.show()
+    tmp = pd.DataFrame({'count': 0}, index=[0])
+    for nindex in range(0, 24):
+        if not nindex in tweet_per_hour.index.tolist():
+            tmp = pd.DataFrame({'count': 0}, index=[nindex])
+            tweet_per_hour = pd.concat([tweet_per_hour, tmp])
+    tweet_per_hour = tweet_per_hour.sort_index()
+    print(tweet_per_hour.index.tolist())
