@@ -27,7 +27,10 @@ if __name__ == '__main__':
         reader = csv.reader(f)
         for row in reader:
             print(row[0])
-            res = api.get_user(row[0])._json
+            try:
+                res = api.get_user(row[0])._json
+            except tweepy.error.TweepError:
+                continue
             name = res['name']
             screen_name = res['screen_name']
             id_str = res['id_str']
