@@ -46,4 +46,10 @@ if __name__ == '__main__':
             tmp = pd.DataFrame({'count': 0}, index=[nindex])
             tweet_per_hour = pd.concat([tweet_per_hour, tmp])
     tweet_per_hour = tweet_per_hour.sort_index()
-    print(tweet_per_hour.index.tolist())
+    # print(tweet_per_hour.index)
+
+    # 時間帯ごとのツイート数の可視化
+    tweet_per_hour.plot.bar()
+    plt.xlabel('hour', size=12)  # x軸指定
+    plt.ylabel('count', size=12)  # Y軸指定
+    plt.show()
