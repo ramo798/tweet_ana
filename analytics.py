@@ -36,7 +36,9 @@ if __name__ == '__main__':
     # 出現回数集計用の数字の用意
     df['count'] = 1
 
+    # print(df.columns.values)
     # print(df[['created_at', 'user.name', 'count', 'date']].head(20))
+    # print(df[['user.followers_count', 'user.friends_count', 'user.name', 'date']].head())
 
     # 時間帯ごとのルイートの集計
     tweet_per_hour = df[['count']].groupby(df['date'].dt.hour).sum()
@@ -49,7 +51,7 @@ if __name__ == '__main__':
     # print(tweet_per_hour.index)
 
     # 時間帯ごとのツイート数の可視化
-    tweet_per_hour.plot.bar()
-    plt.xlabel('hour', size=12)  # x軸指定
-    plt.ylabel('count', size=12)  # Y軸指定
-    plt.show()
+    # tweet_per_hour.plot.bar()
+    # plt.xlabel('hour', size=12)  # x軸指定
+    # plt.ylabel('count', size=12)  # Y軸指定
+    # plt.show()
